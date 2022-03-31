@@ -84,4 +84,4 @@ bindkey '^[[B' history-substring-search-down
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
-source /usr/share/nvm/init-nvm.sh
+#source /usr/share/nvm/init-nvm.sh # nvm is a version manager for node.js
