@@ -37,8 +37,7 @@ fi
 # custom startup
 #export XCURSOR_THEME=Breeze
 export PULSE_LATENCY_MSEC=30 mscore  #fix musesocre noise with pulseaudio
-export QT_STYLE_OVERRIDE=gtk2  #qt5-styleplugins required (aur)
-export QT_QPA_PLATFORMTHEME=qt6gtk2  #qt6gtk2 required (aur)
+export QT_QPA_PLATFORMTHEME=gtk2  #qt6gtk2 and qt5-styleplugins required (aur)
 # Hardware acceleration config
 export LIBVA_DRIVER_NAME=iHD #for intel-media-driver
 export MOZ_X11_EGL=1
