@@ -39,8 +39,10 @@ fi
 export PULSE_LATENCY_MSEC=30 mscore  #fix musesocre noise with pulseaudio
 export QT_QPA_PLATFORMTHEME=gtk2  #qt6gtk2 and qt5-styleplugins required (aur)
 # Hardware acceleration config
-export LIBVA_DRIVER_NAME=iHD #for intel-media-driver
-export MOZ_X11_EGL=1
+#export LIBVA_DRIVER_NAME=iHD #for intel-media-driver
+#export LIBVA_DRIVER_NAME=radeonsi #for AMDGPU driver
+#export LIBVA_DRIVER_NAME=nvidia #nvidia-utils required
+#export MOZ_X11_EGL=1 #if firefox is before 94
 export MOZ_WEBRENDER=1
 # graphical authentication agent
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
