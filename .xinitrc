@@ -42,6 +42,7 @@ export QT_QPA_PLATFORMTHEME=gtk2  #qt6gtk2 and qt5-styleplugins required (aur)
 #export LIBVA_DRIVER_NAME=iHD #for intel-media-driver
 #export LIBVA_DRIVER_NAME=radeonsi #for AMDGPU driver
 #export LIBVA_DRIVER_NAME=nvidia #nvidia-utils required
+#export VDPAU_DRIVER=nvidia
 #export MOZ_X11_EGL=1 #if firefox is before 94
 export MOZ_WEBRENDER=1
 # graphical authentication agent
