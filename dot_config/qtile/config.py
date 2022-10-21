@@ -242,15 +242,12 @@ if num_monitors > 1:
             )
         )
 
-
-
-
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 main = None  # WARNING: this is deprecated and will be removed soon
 follow_mouse_focus = True
 bring_front_click = False
-cursor_warp = False
+cursor_warp = True
 # Floating config from qtile doc start
 floating_layout = layout.Floating(float_rules=[
     *layout.Floating.default_float_rules,
@@ -272,29 +269,6 @@ floating_layout = layout.Floating(float_rules=[
     Match(wm_class='ssh-askpass'),
 ])
 # Floating config from qtile doc end
-# Floating config from Arcolinux start
-#floating_types = ['notification', 'toolbar', 'splash', 'dialog']
-#floating_layout = layout.Floating(float_rules=[
-#    # Run the utility of `xprop` to see the wm class and name of an X client.
-#    {'wmclass': 'confirm'},
-#    {'wmclass': 'dialog'},
-#    {'wmclass': 'download'},
-#    {'wmclass': 'error'},
-#    {'wmclass': 'file_progress'},
-#    {'wmclass': 'notification'},
-#    {'wmclass': 'splash'},
-#    {'wmclass': 'toolbar'},
-#    {'wmclass': 'confirmreset'},  # gitk
-#    {'wmclass': 'makebranch'},  # gitk
-#    {'wmclass': 'maketag'},  # gitk
-#    {'wname': 'branchdialog'},  # gitk
-#    {'wname': 'pinentry'},  # GPG key password entry
-#    {'wmclass': 'ssh-askpass'},  # ssh-askpass
-#    {'wmclass': 'galculator'},
-#    {'wmclass': 'polkit-gnome-authentication-agent-1'},
-#    {'wmclass': 'Browser'},
-#])
-# Floating config from Arcolinux end
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 
