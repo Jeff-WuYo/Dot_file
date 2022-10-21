@@ -32,6 +32,14 @@ from libqtile.utils import guess_terminal
 
 # This import requires **python-xlib** to be installed
 from Xlib import display as xdisplay
+# add function to bring all floating windows to front
+@lazy.function
+def float_to_front(qtile):
+    logging.info("bring floating windows to front")
+    for group in qtile.groups:
+        for window in group.windows:
+            if window.floating:
+                window.cmd_bring_to_front()
 
 def get_num_monitors():
     num_monitors = 0
@@ -76,7 +84,8 @@ keys = [
     Key([mod], "l", lazy.layout.grow()),
     Key([mod], "h", lazy.layout.shrink()),
     Key([mod], "m", lazy.layout.maximize()),
-    Key([mod, "shift"], "m", lazy.layout.reset()),
+    Key([mod, "shift"], "r", lazy.layout.reset()),
+    Key([mod, "shift"], "f", float_to_front),
 
     # Switch focus to another screen
     Key([mod], "p", lazy.next_screen()),
@@ -105,6 +114,7 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown qtile"),
     Key([mod, "shift"], "space", lazy.layout.flip(), desc="Flip xmonad layout mirrored"),
     Key([mod, "control"], "space", lazy.window.toggle_floating(), desc="toggle between floating and non-floating"),
+    Key([mod, "control"], "f", lazy.window.toggle_fullscreen()),
     
     # Launch apps
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
