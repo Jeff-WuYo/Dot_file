@@ -83,7 +83,7 @@ keys = [
     # Resize focused window
     Key([mod], "l", lazy.layout.grow()),
     Key([mod], "h", lazy.layout.shrink()),
-    Key([mod], "m", lazy.layout.maximize()),
+    Key([mod, "control"], "m", lazy.layout.maximize()),
     Key([mod, "shift"], "r", lazy.layout.reset()),
     Key([mod, "shift"], "f", float_to_front),
 
