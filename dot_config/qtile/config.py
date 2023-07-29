@@ -204,7 +204,6 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.CurrentLayout(),
                 widget.GroupBox(disable_drag=True),
                 widget.Prompt(),
                 widget.WindowName(),
@@ -234,7 +233,6 @@ if num_monitors > 1:
             Screen(
                 top=bar.Bar(
                     [
-                        widget.CurrentLayout(),
                         widget.GroupBox(disable_drag=True),
                         widget.Prompt(),
                         widget.WindowName(),
