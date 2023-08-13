@@ -24,23 +24,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from typing import List  # noqa: F401
+#import re
+#from typing import List  # noqa: F401
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Screen, Match
 from libqtile.lazy import lazy
+from libqtile.dgroups import simple_key_binder
 from libqtile.utils import guess_terminal
 
 # This import requires **python-xlib** to be installed
 from Xlib import display as xdisplay
 # add function to bring all floating windows to front
-@lazy.function
-def float_to_front(qtile):
-    logging.info("bring floating windows to front")
-    for group in qtile.groups:
-        for window in group.windows:
-            if window.floating:
-                window.cmd_bring_to_front()
-
 def get_num_monitors():
     num_monitors = 0
     try:
@@ -85,7 +79,6 @@ keys = [
     Key([mod], "h", lazy.layout.shrink()),
     Key([mod, "control"], "m", lazy.layout.maximize()),
     Key([mod, "shift"], "r", lazy.layout.reset()),
-    Key([mod, "shift"], "f", float_to_front),
 
     # Switch focus to another screen
     Key([mod], "p", lazy.next_screen()),
@@ -163,29 +156,24 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
-group_names = [("DEV", {'layout': 'monadtall'}),
-        ("WWW", {'layout': 'monadtall'}),
-        ("CHAT", {'layout': 'monadtall'}),
-        ("DOC", {'layout': 'monadtall'}),
-        ("VBOX", {'layout': 'monadtall'}),
-        ("SYS", {'layout': 'monadwide'}),
-        ("MUS", {'layout': 'monadtall'}),
-        ("VID", {'layout': 'monadtall'}),
-        ("GFX", {'layout': 'floating'})]
-
-groups = [Group(name, **kwargs) for name, kwargs in group_names]
-
-for i, (name, kwargs) in enumerate(group_names, 1):
-    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))        # Switch to another group
-    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name))) # Send current window to another group
+groups = [
+    Group('1'),
+    Group('2'),
+    Group('3'),
+    Group('4'),
+    Group('5'),
+    Group('6', layout="monadwide", label="wide"),
+    Group('7'),
+    Group('8'),
+    Group('9')]
 
 layouts = [
     layout.MonadTall(),
     layout.Max(),
     layout.MonadWide(),
+    # layout.MonadThreeCol(),
     # layout.Floating(),
     # layout.Stack(num_stacks=2),
-    # Try more layouts by unleashing below layouts.
     # layout.Bsp(),
     # layout.Columns(),
     # layout.Matrix(),
@@ -250,9 +238,8 @@ if num_monitors > 1:
             )
         )
 
-dgroups_key_binder = None
+dgroups_key_binder = simple_key_binder("mod4")
 dgroups_app_rules = []  # type: List
-main = None  # WARNING: this is deprecated and will be removed soon
 follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = True
@@ -279,6 +266,7 @@ floating_layout = layout.Floating(float_rules=[
 # Floating config from qtile doc end
 auto_fullscreen = True
 focus_on_window_activation = "smart"
+reconfigure_screens = True
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
