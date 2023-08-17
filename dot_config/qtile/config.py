@@ -157,15 +157,15 @@ mouse = [
 ]
 
 groups = [
-    Group('1'),
-    Group('2'),
-    Group('3'),
-    Group('4'),
-    Group('5'),
-    Group('6', layout="monadwide", label="wide"),
-    Group('7'),
-    Group('8'),
-    Group('9')]
+    Group('1', label="壹"),
+    Group('2', label="貳"),
+    Group('3', label="參"),
+    Group('4', label="肆"),
+    Group('5', label="伍"),
+    Group('6', layout="monadwide", label="陸"),
+    Group('7', label="柒"),
+    Group('8', label="捌"),
+    Group('9', label="玖")]
 
 layouts = [
     layout.MonadTall(),
