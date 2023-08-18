@@ -192,9 +192,9 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.GroupBox(disable_drag=True),
+                widget.GroupBox(disable_drag=True, highlight_method='line', hide_unused=True),
                 widget.Prompt(),
-                widget.WindowName(),
+                widget.WindowTabs(),
                 widget.Chord(
                     chords_colors={
                         'launch': ("#ff0000", "#ffffff"),
@@ -221,9 +221,9 @@ if num_monitors > 1:
             Screen(
                 top=bar.Bar(
                     [
-                        widget.GroupBox(disable_drag=True),
+                        widget.GroupBox(disable_drag=True, highlight_method='line', hide_unused=True),
                         widget.Prompt(),
-                        widget.WindowName(),
+                        widget.WindowTabs(),
                         widget.Chord(
                             chords_colors={
                                 'launch': ("#ff0000", "#ffffff"),
