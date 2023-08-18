@@ -168,12 +168,12 @@ groups = [
     Group('9', label="玖")]
 
 layouts = [
-    layout.MonadTall(),
+    layout.MonadTall(new_client_position='before_current'),
     layout.Max(),
     layout.MonadWide(),
     # layout.MonadThreeCol(),
     # layout.Floating(),
-    # layout.Stack(num_stacks=2),
+    # layout.Stack(autosplit=True, num_stacks=2),
     # layout.Bsp(),
     # layout.Columns(),
     # layout.Matrix(),
@@ -192,9 +192,9 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.GroupBox(disable_drag=True, highlight_method='line', hide_unused=True),
+                widget.GroupBox(disable_drag=True, highlight_method='line', this_current_screen_border='#0088e3', other_current_screen_border='#4a4a4a', hide_unused=True, inactive='#505050'),
                 widget.Prompt(),
-                widget.WindowTabs(),
+                widget.WindowTabs(foreground='#ffe7d6'),
                 widget.Chord(
                     chords_colors={
                         'launch': ("#ff0000", "#ffffff"),
@@ -210,7 +210,7 @@ screens = [
                 widget.Volume(), 
                 widget.QuickExit(),
             ],
-            24,
+            24, opacity=0.9, background='#1d1f21',
         ),
     ),
 ]
@@ -221,9 +221,9 @@ if num_monitors > 1:
             Screen(
                 top=bar.Bar(
                     [
-                        widget.GroupBox(disable_drag=True, highlight_method='line', hide_unused=True),
+                        widget.GroupBox(disable_drag=True, highlight_method='line', this_current_screen_border='#0088e3', other_current_screen_border='#4a4a4a', hide_unused=True, inactive='#505050'),
                         widget.Prompt(),
-                        widget.WindowTabs(),
+                        widget.WindowTabs(foreground='#ffc9a3'),
                         widget.Chord(
                             chords_colors={
                                 'launch': ("#ff0000", "#ffffff"),
@@ -233,7 +233,7 @@ if num_monitors > 1:
                         widget.Clock(format='%Y-%m-%d %a %H:%M:%S'),
                         widget.Volume(), 
                     ],
-                    24,
+                    24, opacity=0.9, background="#1d1f21",
                 ),
             )
         )
