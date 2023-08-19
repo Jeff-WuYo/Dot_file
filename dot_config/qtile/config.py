@@ -156,16 +156,36 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
+# groups name has to be number, cuz how I define keys to switch group, qtile will crash if group name is not number.
 groups = [
-    Group('1', label="壹"),
-    Group('2', label="貳"),
-    Group('3', label="參"),
-    Group('4', label="肆"),
-    Group('5', label="伍"),
-    Group('6', layout="monadwide", label="陸"),
-    Group('7', label="柒"),
-    Group('8', label="捌"),
-    Group('9', label="玖")]
+    Group('1', position=1, label="壹"),
+    Group('2', position=2, label="貳"),
+    Group('3', position=3, label="參"),
+    Group('4', position=4, label="肆"),
+    Group('5', position=5, label="伍"),
+    Group('6', position=6, layout="monadwide", label="陸"),
+    Group('7', position=7, label="柒"),
+    Group('8', position=8, label="捌"),
+    Group('9', position=9, label="玖")]
+
+for i in groups:
+    keys.extend([
+            Key(
+                [mod],
+                i.name,
+                lazy.group[i.name].toscreen(),
+                desc="Switch to group {}".format(i.name)),
+            Key(
+                [mod, "shift"],
+                i.name,
+                lazy.window.togroup(i.name, switch_group=False),
+                desc="Switch to focused window to group {}".format(i.name)),
+            Key(
+                [mod, "control"],
+                i.name,
+                lazy.window.togroup(i.name, switch_group=True),
+                desc="Switch to and move focused window to group {}".format(i.name))
+            ])
 
 layouts = [
     layout.MonadTall(new_client_position='before_current'),
@@ -238,7 +258,7 @@ if num_monitors > 1:
             )
         )
 
-dgroups_key_binder = simple_key_binder("mod4")
+#dgroups_key_binder = simple_key_binder("mod4")
 dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
 bring_front_click = False
