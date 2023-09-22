@@ -119,7 +119,7 @@ keys = [
     Key([mod], "e", lazy.spawn("pcmanfm"), desc="Launch file manager"),
     Key([mod], "g", lazy.spawn("chromium"), desc="Launch chromium"),
     Key([mod], "f", lazy.spawn("firefox"), desc="Launch firefox"),
-    Key([mod], "d", lazy.spawn("librewolf"), desc="Launch librewolf"),
+    Key([mod], "d", lazy.spawn("librewolf --private-window"), desc="Launch librewolf"),
     Key([mod], "n", lazy.spawn("joplin-desktop"), desc="Launch joplin-desktop, n for note"),
     Key([mod], "a", lazy.spawn("keepassxc"), desc="Launch keepAssxc"),
  
@@ -184,7 +184,7 @@ for i in groups:
                 [mod, "control"],
                 i.name,
                 lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch to and move focused window to group {}".format(i.name))
+                desc="Switch to and move focused window to group {}".format(i.name)),
             ])
 
 layouts = [
