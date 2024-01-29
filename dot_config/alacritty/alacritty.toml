@@ -1,0 +1,56 @@
+[window]
+dynamic_title = true
+opacity = 0.9
+
+[colors.bright]
+black = "#41484e"
+blue = "#17a2ff"
+cyan = "#8c95ff"
+green = "#2dd414"
+magenta = "#a25de8"
+red = "#ff1736"
+white = "#ffe9da"
+yellow = "#ffff00"
+
+[colors.dim]
+black = "#2b3034"
+blue = "#0088e3"
+cyan = "#5e6bff"
+green = "#24a60f"
+magenta = "#882fe1"
+red = "#e3001e"
+white = "#ffc9a3"
+yellow = "#cccc00"
+
+[colors.normal]
+black = "#31363b"
+blue = "#0099ff"
+cyan = "#8791ff"
+green = "#28bb11"
+magenta = "#994ce6"
+red = "#ff0022"
+white = "#ffe7d6"
+yellow = "#e6e600"
+
+[colors.primary]
+background = "#1d1f21"
+foreground = "#c5c8c6"
+
+[font]
+size = 14.0
+
+[font.bold]
+family = "Noto Sans Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "Noto Sans Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "Noto Sans Mono"
+style = "Italic"
+
+[font.normal]
+family = "Noto Sans Mono"
+style = "Regular"
