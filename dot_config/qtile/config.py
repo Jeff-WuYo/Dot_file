@@ -118,8 +118,8 @@ keys = [
     Key([mod], "b", lazy.spawn("brave"), desc="Launch Borwser"),
     Key([mod], "e", lazy.spawn("pcmanfm"), desc="Launch file manager"),
     Key([mod], "g", lazy.spawn("chromium"), desc="Launch chromium"),
-    Key([mod], "f", lazy.spawn("firefox"), desc="Launch firefox"),
-    Key([mod], "d", lazy.spawn("librewolf --private-window"), desc="Launch librewolf"),
+    Key([mod], "f", lazy.spawn("librewolf"), desc="Launch librewolf"),
+    Key([mod], "d", lazy.spawn("librewolf --private-window"), desc="Launch librewolf incognito"),
     Key([mod], "n", lazy.spawn("joplin-desktop"), desc="Launch joplin-desktop, n for note"),
     Key([mod], "a", lazy.spawn("keepassxc"), desc="Launch keepAssxc"),
  
@@ -210,6 +210,8 @@ widget_defaults = dict(
 
 screens = [
     Screen(
+        wallpaper="~/Pictures/Ina'nis.jpeg",
+        wallpaper_mode='fill',
         top=bar.Bar(
             [
                 widget.GroupBox(disable_drag=True, highlight_method='line', this_current_screen_border='#0088e3', other_current_screen_border='#4a4a4a', hide_unused=True, inactive='#505050'),
@@ -239,6 +241,8 @@ if num_monitors > 1:
     for m in range(num_monitors - 1):
         screens.append(
             Screen(
+                wallpaper="~/Pictures/enna_mugimugigo_ennaday2024.jpg",
+                wallpaper_mode='fill',
                 top=bar.Bar(
                     [
                         widget.GroupBox(disable_drag=True, highlight_method='line', this_current_screen_border='#0088e3', other_current_screen_border='#4a4a4a', hide_unused=True, inactive='#505050'),
