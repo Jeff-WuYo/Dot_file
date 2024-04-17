@@ -1,0 +1,33 @@
+#!/bin/sh
+userresources=$HOME/.Xresources
+usermodmap=$HOME/.Xmodmap
+sysresources=/etc/X11/xinit/.Xresources
+sysmodmap=/etc/X11/xinit/.Xmodmap
+# merge in defaults and keymaps
+[ -f $sysresources ] && xrdb -merge $sysresources &
+[ -f $sysmodmap ] && xmodmap $sysmodmap &
+[ -f "$userresources" ] && xrdb -merge "$userresources" &
+[ -f "$usermodmap" ] && xmodmap "$usermodmap" &
+
+# custom startup
+export QT_QPA_PLATFORMTHEME=gtk2  #qt6gtk2 and qt5-styleplugins required (aur)
+#export WEBKIT_FORCE_SANDBOX=0
+# Hardware acceleration config
+#export LIBVA_DRIVER_NAME=iHD #for intel-media-driver
+#export VDPAU_DRIVER=va_gl
+#export LIBVA_DRIVER_NAME=radeonsi #for AMDGPU driver
+export LIBVA_DRIVER_NAME=nvidia #nvidia-utils required
+export VDPAU_DRIVER=nvidia
+
+# graphical authentication agent
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+# fcitx5 input
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+fcitx5 -d -r -s 4 &
+
+# wallpaper
+picom -b &
+exec qtile start
