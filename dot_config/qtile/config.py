@@ -34,7 +34,6 @@ from libqtile.utils import guess_terminal
 
 # This import requires **python-xlib** to be installed
 from Xlib import display as xdisplay
-# add function to bring all floating windows to front
 def get_num_monitors():
     num_monitors = 0
     try:
@@ -192,7 +191,7 @@ layouts = [
     layout.Max(),
     layout.MonadWide(),
     # layout.MonadThreeCol(),
-    # layout.Floating(),
+    # layout.Floating(border_focus='#00ff00'),
     # layout.Stack(autosplit=True, num_stacks=2),
     # layout.Bsp(),
     # layout.Columns(),
@@ -204,8 +203,10 @@ layouts = [
     # layout.Zoomy(),
 ]
 
+prompt = widget.Prompt(ignore_dups_history=True) # qtile/#3379
+
 widget_defaults = dict(
-    font='Noto Sans',
+    font='Spline Sans Mono',
     fontsize=14,)
 
 screens = [
@@ -215,7 +216,7 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(disable_drag=True, highlight_method='line', this_current_screen_border='#0088e3', other_current_screen_border='#4a4a4a', hide_unused=True, inactive='#505050'),
-                widget.Prompt(),
+                prompt,
                 widget.WindowTabs(foreground='#ffe7d6'),
                 widget.Chord(
                     chords_colors={
@@ -235,39 +236,34 @@ screens = [
             24, opacity=0.9, background='#1d1f21',
         ),
     ),
-]
-
-if num_monitors > 1:
-    for m in range(num_monitors - 1):
-        screens.append(
-            Screen(
-                wallpaper="~/Pictures/enna_mugimugigo_ennaday2024.jpg",
-                wallpaper_mode='fill',
-                top=bar.Bar(
-                    [
-                        widget.GroupBox(disable_drag=True, highlight_method='line', this_current_screen_border='#0088e3', other_current_screen_border='#4a4a4a', hide_unused=True, inactive='#505050'),
-                        widget.Prompt(),
-                        widget.WindowTabs(foreground='#ffc9a3'),
-                        widget.Chord(
-                            chords_colors={
-                                'launch': ("#ff0000", "#ffffff"),
-                            },name_transform=lambda name: name.upper(),
-                        ),
-                        widget.TextBox("I said DON'T touch my computer", name="default"),
-                        widget.Clock(format='%Y-%m-%d %a %H:%M:%S'),
-                        widget.Volume(), 
-                    ],
-                    24, opacity=0.9, background="#1d1f21",
+    Screen(
+        wallpaper="~/Pictures/enna_mugimugigo_ennaday2024.jpg",
+        wallpaper_mode='fill',
+        top=bar.Bar(
+            [
+                widget.GroupBox(disable_drag=True, highlight_method='line', this_current_screen_border='#0088e3', other_current_screen_border='#4a4a4a', hide_unused=True, inactive='#505050'),
+                prompt,
+                widget.WindowTabs(foreground='#ffc9a3'),
+                widget.Chord(
+                    chords_colors={
+                        'launch': ("#ff0000", "#ffffff"),
+                    },name_transform=lambda name: name.upper(),
                 ),
-            )
-        )
+                widget.TextBox("I said DON'T touch my computer", name="default"),
+                widget.Clock(format='%Y-%m-%d %a %H:%M:%S'),
+                widget.Volume(), 
+            ],
+            24, opacity=0.9, background="#1d1f21",
+        ),
+    )
+]
 
 #dgroups_key_binder = simple_key_binder("mod4")
 dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = True
-# Floating config from qtile doc start
+
 floating_layout = layout.Floating(float_rules=[
     *layout.Floating.default_float_rules,
     Match(wm_type='utility'),
@@ -286,8 +282,9 @@ floating_layout = layout.Floating(float_rules=[
     Match(wm_class='galculator'),
     Match(wm_class='Browser'),
     Match(wm_class='ssh-askpass'),
-])
-# Floating config from qtile doc end
+],
+    border_focus='#00ff00')
+
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
