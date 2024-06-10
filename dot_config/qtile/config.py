@@ -80,11 +80,10 @@ keys = [
     Key([mod, "shift"], "r", lazy.layout.reset()),
 
     # Switch focus to another screen
-    Key([mod], "p", lazy.next_screen()),
-    Key([mod], "o", lazy.prev_screen()),
+    Key([mod], "s", lazy.next_screen()),
 
     # Switch window focus to other pane(s) of stack
-    Key(["mod1"], "Tab", lazy.layout.next(), desc="Switch window focus in old faction way"),
+    Key(["mod1"], "Tab", lazy.layout.next(), desc="Switch window focus in old fashion way"),
     Key([mod], "space", lazy.layout.next(), desc="Switch window focus to other pane(s) of stack"),
 
     # Swap panes of split stack
@@ -114,7 +113,7 @@ keys = [
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "t", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "c", lazy.spawn("galculator"), desc="Launch GTK calculator"),
-    Key([mod], "b", lazy.spawn("brave"), desc="Launch Borwser"),
+    Key([mod], "b", lazy.spawn("brave --tls-version-min=1.3"), desc="Launch Borwser"),
     Key([mod], "e", lazy.spawn("pcmanfm"), desc="Launch file manager"),
     Key([mod], "g", lazy.spawn("chromium"), desc="Launch chromium"),
     Key([mod], "f", lazy.spawn("librewolf"), desc="Launch librewolf"),
