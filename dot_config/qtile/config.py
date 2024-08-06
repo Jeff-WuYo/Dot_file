@@ -24,39 +24,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#import re
-#from typing import List  # noqa: F401
-from libqtile import bar, layout, widget, hook
-from libqtile.config import Click, Drag, Group, Key, Screen, Match
+from libqtile import bar, layout, qtile
+from qtile_extras import widget
+from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
-from libqtile.dgroups import simple_key_binder
 from libqtile.utils import guess_terminal
+from libqtile.backend.wayland import InputConfig
 
-# This import requires **python-xlib** to be installed
-from Xlib import display as xdisplay
-def get_num_monitors():
-    num_monitors = 0
-    try:
-        display = xdisplay.Display()
-        screen = display.screen()
-        resources = screen.root.xrandr_get_screen_resources()
-
-        for output in resources.outputs:
-            monitor = display.xrandr_get_output_info(output, resources.config_timestamp)
-            preferred = False
-            if hasattr(monitor, "preferred"):
-                preferred = monitor.preferred
-            elif hasattr(monitor, "num_preferred"):
-                preferred = monitor.num_preferred
-            if preferred:
-                num_monitors += 1
-    except Exception as e:
-        # always setup at least one monitor
-        return 1
-    else:
-        return num_monitors
-
-num_monitors = get_num_monitors()
+if qtile.core.name == "wayland":
+    import os, subprocess
+    from libqtile import hook
+    os.environ['QT_QPA_PLATFORMTHEME'] = 'gtk2'
+    os.environ['GTK_IM_MODULE'] = 'fcitx'
+    os.environ['QT_IM_MODULE'] = 'fcitx'
+    os.environ['LIBVA_DRIVER_NAME'] = 'nvidia'
+    os.environ['VDPAU_DRIVER'] = 'nvidia'
+    subprocess.Popen(["/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"])
+    subprocess.Popen(["fcitx5", "-d", "-r", "-s", "4"])
+    subprocess.Popen(["swayidle", "-w"])
+    subprocess.Popen(["swaddle"])
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -84,11 +70,11 @@ keys = [
 
     # Switch window focus to other pane(s) of stack
     Key(["mod1"], "Tab", lazy.layout.next(), desc="Switch window focus in old fashion way"),
+    Key([mod], "w", lazy.layout.next(), desc="Switch window focus to other pane(s) of stack"),
     Key([mod], "space", lazy.layout.next(), desc="Switch window focus to other pane(s) of stack"),
 
     # Swap panes of split stack
-    Key([mod, "shift"], "space", lazy.layout.rotate(),
-        desc="Swap panes of split stack"),
+    #Key([mod, "shift"], "space", lazy.layout.rotate(), desc="Swap panes of split stack"),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -101,7 +87,8 @@ keys = [
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
     Key(["mod1"], "F4", lazy.window.kill(), desc="Kill focused window"),
-    Key([mod, "control"], "r", lazy.restart(), desc="Restart qtile"),
+    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
+    Key([mod, "control", "shift"], "r", lazy.restart(), desc="Restart qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown qtile"),
     Key([mod, "shift"], "space", lazy.layout.flip(), desc="Flip xmonad layout mirrored"),
     Key([mod, "control"], "space", lazy.window.toggle_floating(), desc="toggle between floating and non-floating"),
@@ -114,7 +101,7 @@ keys = [
     Key([mod], "t", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "c", lazy.spawn("galculator"), desc="Launch GTK calculator"),
     Key([mod], "b", lazy.spawn("brave --tls-version-min=1.3"), desc="Launch Borwser"),
-    Key([mod], "e", lazy.spawn("pcmanfm"), desc="Launch file manager"),
+    Key([mod], "e", lazy.spawn("pcmanfm-qt"), desc="Launch file manager"),
     Key([mod], "g", lazy.spawn("chromium"), desc="Launch chromium"),
     Key([mod], "f", lazy.spawn("librewolf"), desc="Launch librewolf"),
     Key([mod], "d", lazy.spawn("librewolf --private-window"), desc="Launch librewolf incognito"),
@@ -145,14 +132,19 @@ keys = [
     Key([mod, "mod1", "control"], "Page_Up", lazy.spawn("reboot"), desc="Reboot computer"),
 ]
 
-# Drag floating layouts.
-mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front()),
-]
+# Add key bindings to switch VTs in Wayland.
+# We can't check qtile.core.name in default config as it is loaded before qtile is started
+# We therefore defer the check until the key binding is run by using .when(func=...)
+for vt in range(1, 8):
+    keys.append(
+        Key(
+            ["control", "mod1"],
+            f"f{vt}",
+            lazy.core.change_vt(vt).when(func=lambda: qtile.core.name == "wayland"),
+            desc=f"Switch to VT{vt}",
+        )
+    )
+
 
 # groups name has to be number, cuz how I define keys to switch group, qtile will crash if group name is not number.
 groups = [
@@ -193,7 +185,7 @@ layouts = [
     # layout.Floating(border_focus='#00ff00'),
     # layout.Stack(autosplit=True, num_stacks=2),
     # layout.Bsp(),
-    # layout.Columns(),
+    # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
     # layout.Matrix(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -203,10 +195,17 @@ layouts = [
 ]
 
 prompt = widget.Prompt(ignore_dups_history=True) # qtile/#3379
+# NB Systray is incompatible with Wayland, consider using StatusNotifier instead
+if qtile.core.name == "wayland":
+    systray = widget.StatusNotifier(icon_size=20)
+elif qtile.core.name == "x11":
+    systray = widget.Systray(icon_size=20)
 
 widget_defaults = dict(
     font='Spline Sans Mono',
     fontsize=14,)
+
+extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
@@ -228,7 +227,7 @@ screens = [
                 widget.CPU(format='CPU {freq_current}GHz {load_percent}%'),
                 widget.ThermalSensor(tag_sensor='Package id 0', threshold=75, update_interval=1, desc="CPU package temp"),
                 widget.Clock(format='%Y-%m-%d %a %H:%M:%S'),
-                widget.Systray(icon_size=20),
+                systray,
                 widget.Volume(), 
                 widget.QuickExit(),
             ],
@@ -253,40 +252,76 @@ screens = [
                 widget.Volume(), 
             ],
             24, opacity=0.9, background="#1d1f21",
+            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
+            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
-    )
+        # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
+        # By default we handle these events delayed to already improve performance, however your system might still be struggling
+        # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
+        # x11_drag_polling_rate = 60,
+    ),
 ]
 
-#dgroups_key_binder = simple_key_binder("mod4")
-dgroups_app_rules = []  # type: List
+# Drag floating layouts.
+mouse = [
+    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front()),
+]
+
+dgroups_key_binder = None
+dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
 bring_front_click = False
+floats_kept_above = True
 cursor_warp = True
-
-floating_layout = layout.Floating(float_rules=[
-    *layout.Floating.default_float_rules,
-    Match(wm_type='utility'),
-    Match(wm_type='notification'),
-    Match(wm_type='toolbar'),
-    Match(wm_type='splash'),
-    Match(wm_type='dialog'),
-    Match(wm_class='file_progress'),
-    Match(wm_class='confirm'),
-    Match(wm_class='dialog'),
-    Match(wm_class='download'),
-    Match(wm_class='error'),
-    Match(wm_class='notification'),
-    Match(wm_class='splash'),
-    Match(wm_class='toolbar'),
-    Match(wm_class='galculator'),
-    Match(wm_class='Browser'),
-    Match(wm_class='ssh-askpass'),
-],
+floating_layout = layout.Floating(
+    float_rules=[
+        # Run the utility of `xprop` to see the wm class and name of an X client.
+        *layout.Floating.default_float_rules,
+        Match(wm_class="confirmreset"),  # gitk
+        Match(wm_class="makebranch"),  # gitk
+        Match(wm_class="maketag"),  # gitk
+        Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(title="branchdialog"),  # gitk
+        Match(title="pinentry"),  # GPG key password entry
+        Match(wm_type='utility'),
+        Match(wm_type='notification'),
+        Match(wm_type='toolbar'),
+        Match(wm_type='splash'),
+        Match(wm_type='dialog'),
+        Match(wm_class='file_progress'),
+        Match(wm_class='confirm'),
+        Match(wm_class='dialog'),
+        Match(wm_class='download'),
+        Match(wm_class='error'),
+        Match(wm_class='notification'),
+        Match(wm_class='splash'),
+        Match(wm_class='toolbar'),
+        Match(wm_class='galculator'),
+        Match(wm_class='Browser'),
+        Match(wm_class='mpv'),
+        Match(title='KeePassXC - Browser Access Request'),
+        Match(title='<no name>'),
+    ],
     border_focus='#00ff00')
 
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
+
+# If things like steam games want to auto-minimize themselves when losing
+# focus, should we respect this or not?
+auto_minimize = True
+
+# When using the Wayland backend, this can be used to configure input devices.
+wl_input_rules = {
+    "type:pointer": InputConfig(accel_profile='flat'),
+}
+
+# xcursor theme (string or None) and size (integer) for Wayland backend
+wl_xcursor_theme = "Layan-white-cursors"
+wl_xcursor_size = 24
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
