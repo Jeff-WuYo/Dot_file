@@ -9,6 +9,13 @@ sysmodmap=/etc/X11/xinit/.Xmodmap
 [ -f "$userresources" ] && xrdb -merge "$userresources" &
 [ -f "$usermodmap" ] && xmodmap "$usermodmap" &
 
+# setup dbus user session
+[ -d /etc/X11/xinit/xinitrc.d ] && 
+  for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+    [ -x "$f" ] && . "$f"
+  done
+  unset f
+
 # custom startup
 export QT_QPA_PLATFORMTHEME=gtk2  #qt6gtk2 and qt5-styleplugins required (aur)
 #export WEBKIT_FORCE_SANDBOX=0
