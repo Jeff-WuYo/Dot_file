@@ -1,0 +1,8 @@
+set nu rnu cursorline smartindent expandtab tabstop=2 shiftwidth=2 softtabstop=2 scrolloff=8 updatetime=50 incsearch hlsearch
+nnoremap("<C-d>", "<C-d>zz")
+nnoremap("<C-u>", "<C-u>zz")
+nnoremap("n", "nzzzv")
+nnoremap("N", "Nzzzv")
+nnoremap <silent>* *:noh<CR>
+nnoremap <silent># #:noh<CR>
+syntax on

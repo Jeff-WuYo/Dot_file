@@ -1,3 +1,0 @@
-:set rnu cursorline autoindent expandtab tabstop=4 shiftwidth=4
-:filetype plugin on
-:syntax on
