@@ -1,0 +1,22 @@
+alias cp='cp -iv'         # Confirm before overwriting something
+alias df='df -h'          # Human-readable sizes
+alias du='du -h'          # Human-readable sizes
+alias free='free -m'      # Show sizes in MB
+alias gitu='git add . && git commit && git push'
+alias ls='ls --color'
+alias la='ls -a --color'
+alias ll='ls -lh --color'
+alias lla='ls -alh --color'
+alias grep='grep --colour=auto'
+alias egrep='egrep --colour=auto'
+alias fgrep='fgrep --colour=auto'
+alias mpv='mpv --hwdec=auto'
+alias ytd='yt-dlp'
+alias ytdmp3='yt-dlp -x --audio-format mp3 --audio-quality 0'
+alias ytdaac='yt-dlp -x --audio-format aac --audio-quality 0'
+alias Syu='doas pacman -Syu'
+alias SyQu='doas pacman -Sy && pacman -Qu'
+alias Rns='doas pacman -Rns'
+alias vi='nvim'
+alias ip='ip -c=always'
+alias -s {conf,txt,md}=nvim

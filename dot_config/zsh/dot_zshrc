@@ -1,0 +1,75 @@
+# Basic
+#PS1='%(?..%B%F{red}%?%b%f )%3~%# '
+#RPS1='%D{%Y-%m-%d %H:%M:%S}'
+source $ZDOTDIR/zsh_alias
+[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
+
+# ZLE keymaps
+autoload -Uz edit-command-line ; zle -N edit-command-line
+bindkey '^x^e' edit-command-line    # Ctrl-x-e to edit command line
+bindkey -M emacs '\e' vi-cmd-mode   # ESC to enter vi command mode
+bindkey -M emacs '^u' backward-kill-line
+bindkey -rM vicmd ':'               # Unbind minibuffer keymaps
+bindkey -rM emacs '^r'
+
+# Command completion
+autoload -Uz compinit ; compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-$ZSH_VERSION
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"         # Colored completion (different colors for dirs/files/etc)
+zstyle ':completion:*' rehash true                              # automatically find new executables in path 
+
+# Speed up completions
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
+zstyle ':completion:*' menu select
+
+# Options
+#bindkey -v
+export KEYTIMEOUT=10          # delay of pressing Esc key in vi mode
+setopt NUMERIC_GLOB_SORT      # Sort filenames numerically when it makes sense
+setopt NOBEEP                 # No beep
+setopt AUTOCD                 # if only directory path is entered, cd there.
+setopt CORRECT
+setopt EXTENDED_GLOB
+setopt HIST_IGNORE_DUPS
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt SHARE_HISTORY
+setopt NO_NOTIFY
+
+# Change cursor shape for different vi modes.
+zle-keymap-select(){
+case $KEYMAP in
+  vicmd) echo -ne '\e[2 q' ;;
+  viins|main|emacs) echo -ne '\e[6 q' ;;
+esac
+}
+zle -N zle-keymap-select
+
+# make zsh change terminal window title
+case $TERM in
+  alacritty|foot)
+    precmd () { print -Pn "\e]0;[%n@%M][%~]%#\a" } 
+    preexec () { print -Pn "\e]0;[%n@%M][%~]%# ($1)\a" }
+    ;;
+esac
+
+# Plugins
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+# Bind UP and DOWN arrow keys to history substring search
+#zmodload zsh/terminfo
+bindkey '^[[A' history-substring-search-up			
+bindkey '^[[B' history-substring-search-down
+
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+
+# zsh-vi-mode
+#source /usr/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
