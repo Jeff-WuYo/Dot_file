@@ -1,9 +1,10 @@
 # Basic
 #PS1='%(?..%B%F{red}%?%b%f )%3~%# '
 #RPS1='%D{%Y-%m-%d %H:%M:%S}'
+echo -ne '\e[6 q'
 source $ZDOTDIR/zsh_alias
 source $ZDOTDIR/.zshenv
-[ -d "$XDG_CACHE_HOME"/zsh/zcompcache ] || mkdir -p "$XDG_CACHE_HOME"/zsh/zcompcache
+[ -d "$XDG_CACHE_HOME/zsh/zcompcache" ] || mkdir -p "$XDG_CACHE_HOME/zsh/zcompcache"
 
 # ZLE keymaps
 autoload -Uz edit-command-line ; zle -N edit-command-line
@@ -14,7 +15,7 @@ bindkey -rM vicmd ':'               # Unbind minibuffer keymaps
 bindkey -rM emacs '^r'
 
 # Command completion
-autoload -Uz compinit ; compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
+autoload -Uz compinit ; compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"         # Colored completion (different colors for dirs/files/etc)
 zstyle ':completion:*' rehash true                              # automatically find new executables in path 
