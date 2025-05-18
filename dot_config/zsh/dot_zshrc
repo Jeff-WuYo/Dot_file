@@ -8,11 +8,11 @@ source $ZDOTDIR/.zshenv
 
 # ZLE keymaps
 autoload -Uz edit-command-line ; zle -N edit-command-line
-bindkey '^x^e' edit-command-line    # Ctrl-x-e to edit command line
-bindkey -M emacs '\e' vi-cmd-mode   # ESC to enter vi command mode
-bindkey -M emacs '^u' backward-kill-line
-bindkey -rM vicmd ':'               # Unbind minibuffer keymaps
-bindkey -rM emacs '^r'
+bindkey -e
+bindkey '^x^e' edit-command-line      # Ctrl-x-e to edit command line
+bindkey -M emacs '^[' vi-cmd-mode     # ESC to enter vi command mode
+bindkey -M emacs '^[[3~' delete-char  # Delete to delete charactor
+bindkey -rM vicmd ':'                 # Unbind minibuffer keymaps
 
 # Command completion
 autoload -Uz compinit ; compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
@@ -27,7 +27,6 @@ zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 zstyle ':completion:*' menu select
 
 # Options
-#bindkey -v
 export KEYTIMEOUT=10          # delay of pressing Esc key in vi mode
 setopt NUMERIC_GLOB_SORT      # Sort filenames numerically when it makes sense
 setopt NOBEEP                 # No beep
@@ -44,8 +43,8 @@ setopt NO_NOTIFY
 # Change cursor shape for different vi modes.
 zle-keymap-select(){
 case $KEYMAP in
-  vicmd) echo -ne '\e[2 q' ;;
   viins|main|emacs) echo -ne '\e[6 q' ;;
+  vicmd) echo -ne '\e[2 q' ;;
 esac
 }
 zle -N zle-keymap-select
