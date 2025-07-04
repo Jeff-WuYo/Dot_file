@@ -1,0 +1,1 @@
+timeout 240 'wlopm --off "*"' resume 'wlopm --on "*"'
